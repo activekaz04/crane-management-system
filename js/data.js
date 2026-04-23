@@ -54,8 +54,9 @@ const DataStore = {
      ============================================================ */
 
   async getCranes() {
-    const snap = await db.collection('cranes').orderBy('createdAt').get();
-    return snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    const snap = await db.collection('cranes').get();
+    const list = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    return list.sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''));
   },
 
   async getCrane(id) {
@@ -94,9 +95,9 @@ const DataStore = {
   async getMaintenanceRecords(craneId) {
     const snap = await db.collection('maintenance')
       .where('craneId', '==', craneId)
-      .orderBy('date', 'desc')
       .get();
-    return snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    const list = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    return list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
   },
 
   async getLatestMaintenanceByType(craneId) {
