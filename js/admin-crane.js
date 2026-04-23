@@ -28,11 +28,11 @@ async function loadCrane() {
 
   document.title = `${crane.vehicleNumber} | 管理者`;
   document.getElementById('pageHeading').textContent    = crane.vehicleNumber;
-  document.getElementById('pageSubheading').textContent = crane.name;
+  document.getElementById('pageSubheading').textContent = crane.tonnage || '';
   document.getElementById('fieldVehicleNumber').value   = crane.vehicleNumber || '';
-  document.getElementById('fieldName').value            = crane.name          || '';
+  document.getElementById('fieldMaker').value           = crane.maker         || '';
+  document.getElementById('fieldTonnage').value         = crane.tonnage       || '';
   document.getElementById('fieldModel').value           = crane.model         || '';
-  document.getElementById('fieldLocation').value        = crane.location      || '';
   document.getElementById('fieldStatus').value          = crane.status        || 'active';
   document.getElementById('fieldNotes').value           = crane.notes         || '';
 }
@@ -41,9 +41,9 @@ async function saveCraneInfo(e) {
   e.preventDefault();
   const crane = await DataStore.getCrane(currentCraneId);
   crane.vehicleNumber = document.getElementById('fieldVehicleNumber').value.trim();
-  crane.name          = document.getElementById('fieldName').value.trim();
+  crane.maker         = document.getElementById('fieldMaker').value.trim();
+  crane.tonnage       = document.getElementById('fieldTonnage').value.trim();
   crane.model         = document.getElementById('fieldModel').value.trim();
-  crane.location      = document.getElementById('fieldLocation').value.trim();
   crane.status        = document.getElementById('fieldStatus').value;
   crane.notes         = document.getElementById('fieldNotes').value.trim();
   await DataStore.saveCrane(crane);

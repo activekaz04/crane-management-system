@@ -33,7 +33,7 @@ async function renderCranes() {
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-sm)">
             <div>
               <div style="font-size:var(--font-size-xl);font-weight:700;color:var(--color-primary)">${crane.vehicleNumber}</div>
-              <div style="color:var(--color-text-muted)">${crane.name} ／ ${crane.model || '—'} ／ ${crane.location || '—'}</div>
+              <div style="color:var(--color-text-muted)">${crane.tonnage || '—'} ／ ${crane.maker || '—'} ／ ${crane.model || '—'}</div>
               <div style="margin-top:var(--sp-xs)">
                 <span class="badge ${statusBadge[crane.status] || 'badge-muted'}">${statusMap[crane.status] || crane.status}</span>
                 <span class="badge badge-primary" style="margin-left:4px"><i class="fas fa-clipboard-list"></i> ${records.length}件</span>
@@ -69,12 +69,12 @@ function openCraneModal(craneId) {
         <div class="modal-body">
           <div class="form-group"><label class="form-label">車番 <span class="required">*</span></label>
             <input type="text" class="form-control" id="cVehicleNumber" value="${crane ? crane.vehicleNumber : ''}" placeholder="例：奈良100 あ 1234" required></div>
-          <div class="form-group"><label class="form-label">クレーン名 <span class="required">*</span></label>
-            <input type="text" class="form-control" id="cName" value="${crane ? crane.name : ''}" placeholder="例：ラフタークレーン 25t" required></div>
+          <div class="form-group"><label class="form-label">メーカー</label>
+            <input type="text" class="form-control" id="cMaker" value="${crane ? (crane.maker || '') : ''}" placeholder="例：タダノ、コベルコ"></div>
+          <div class="form-group"><label class="form-label">トン数 <span class="required">*</span></label>
+            <input type="text" class="form-control" id="cTonnage" value="${crane ? (crane.tonnage || '') : ''}" placeholder="例：25t" required></div>
           <div class="form-group"><label class="form-label">型番・型式</label>
             <input type="text" class="form-control" id="cModel" value="${crane ? (crane.model || '') : ''}" placeholder="例：GR-250N"></div>
-          <div class="form-group"><label class="form-label">設置場所</label>
-            <input type="text" class="form-control" id="cLocation" value="${crane ? (crane.location || '') : ''}" placeholder="例：奈良営業所"></div>
           <div class="form-group"><label class="form-label">ステータス</label>
             <select class="form-control" id="cStatus">
               <option value="active"      ${crane && crane.status === 'active'      ? 'selected' : ''}>稼働中</option>
@@ -96,15 +96,15 @@ function openCraneModal(craneId) {
 
 async function saveCrane(craneId) {
   const vehicleNumber = document.getElementById('cVehicleNumber').value.trim();
-  const name          = document.getElementById('cName').value.trim();
-  if (!vehicleNumber || !name) { showToast('車番とクレーン名は必須です', 'error'); return; }
+  const tonnage       = document.getElementById('cTonnage').value.trim();
+  if (!vehicleNumber || !tonnage) { showToast('車番とトン数は必須です', 'error'); return; }
 
   const crane = craneId ? (await DataStore.getCrane(craneId) || {}) : {};
   if (craneId) crane.id = craneId;
   crane.vehicleNumber = vehicleNumber;
-  crane.name     = name;
+  crane.maker    = document.getElementById('cMaker').value.trim();
+  crane.tonnage  = tonnage;
   crane.model    = document.getElementById('cModel').value.trim();
-  crane.location = document.getElementById('cLocation').value.trim();
   crane.status   = document.getElementById('cStatus').value;
   crane.notes    = document.getElementById('cNotes').value.trim();
 
@@ -138,7 +138,7 @@ function showQrModal(craneId) {
         </div>
         <div class="modal-body">
           <div style="font-size:var(--font-size-lg);font-weight:700;color:var(--color-primary);margin-bottom:4px">${crane.vehicleNumber}</div>
-          <div style="color:var(--color-text-muted);margin-bottom:var(--sp-md)">${crane.name}</div>
+          <div style="color:var(--color-text-muted);margin-bottom:var(--sp-md)">${crane.tonnage || ''}</div>
           <div id="qrCodeWrap" style="display:flex;justify-content:center;margin-bottom:var(--sp-md)"></div>
           <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);word-break:break-all" id="qrUrlText"></div>
         </div>

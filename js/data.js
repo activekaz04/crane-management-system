@@ -16,9 +16,9 @@ const MAINT_TYPES = [
 
 /* ─── サンプルデータ ─── */
 const SAMPLE_CRANES = [
-  { id: 'CRANE-001', vehicleNumber: '奈良100 あ 1234', name: 'ラフタークレーン 25t', model: 'GR-250N',  location: '奈良営業所', status: 'active', notes: '定期点検済み', createdAt: '2024-01-10T09:00:00.000Z' },
-  { id: 'CRANE-002', vehicleNumber: '奈良100 い 5678', name: 'ラフタークレーン 50t', model: 'GR-500N',  location: '奈良営業所', status: 'active', notes: '',         createdAt: '2024-01-10T09:00:00.000Z' },
-  { id: 'CRANE-003', vehicleNumber: '奈良100 う 9012', name: 'トラッククレーン 16t', model: 'TG-1600M', location: '大阪出張所', status: 'active', notes: 'タイヤ要経過観察', createdAt: '2024-01-10T09:00:00.000Z' },
+  { id: 'CRANE-001', vehicleNumber: '奈良100 あ 1234', maker: 'タダノ',   tonnage: '25t', model: 'GR-250N',  status: 'active', notes: '定期点検済み', createdAt: '2024-01-10T09:00:00.000Z' },
+  { id: 'CRANE-002', vehicleNumber: '奈良100 い 5678', maker: 'タダノ',   tonnage: '50t', model: 'GR-500N',  status: 'active', notes: '',            createdAt: '2024-01-10T09:00:00.000Z' },
+  { id: 'CRANE-003', vehicleNumber: '奈良100 う 9012', maker: 'コベルコ', tonnage: '16t', model: 'TG-1600M', status: 'active', notes: 'タイヤ要経過観察', createdAt: '2024-01-10T09:00:00.000Z' },
 ];
 
 const SAMPLE_MAINT = [

@@ -24,10 +24,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('craneInfo').innerHTML = `
       <div class="crane-info-card">
         <div class="crane-vehicle-number"><i class="fas fa-id-card"></i> ${crane.vehicleNumber}</div>
-        <div class="crane-name-display">${crane.name}</div>
+        <div class="crane-name-display">${crane.tonnage || crane.name || ''}</div>
         <div class="crane-meta">
+          ${crane.maker ? `<div class="crane-meta-item"><i class="fas fa-industry"></i> ${crane.maker}</div>` : ''}
           <div class="crane-meta-item"><i class="fas fa-cogs"></i> ${crane.model || '—'}</div>
-          <div class="crane-meta-item"><i class="fas fa-map-marker-alt"></i> ${crane.location || '—'}</div>
           ${crane.notes ? `<div class="crane-meta-item"><i class="fas fa-sticky-note"></i> ${crane.notes}</div>` : ''}
         </div>
       </div>`;
