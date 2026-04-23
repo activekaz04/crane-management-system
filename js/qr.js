@@ -7,11 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!Auth.requireAuth()) return;
   DataStore.init();
 
-  /* ベースURL入力欄を初期化（GitHub Pages URLを優先） */
-  const ghPagesBase = 'https://activekaz04.github.io/crane-management-system/';
-  const defaultBase = window.location.hostname === 'activekaz04.github.io'
-    ? ghPagesBase
-    : window.location.href.replace(/[^/]*$/, '');
+  /* ベースURLは常にGitHub PagesのURLを使用 */
+  const defaultBase = 'https://activekaz04.github.io/crane-management-system/';
   document.getElementById('baseUrlInput').value = defaultBase;
 
   /* 全クレーン分QRを生成 */
