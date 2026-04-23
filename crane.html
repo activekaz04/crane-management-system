@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クレーン詳細 | サンワクレーン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <a class="header-brand" href="#">
+      <img class="header-logo"
+           src="http://sanwacrane.jp/images/logo4.png"
+           alt="サンワクレーン"
+           onerror="this.style.display='none'">
+      <div class="header-brand-text">
+        <div class="header-title">サンワクレーン</div>
+        <div class="header-subtitle">クレーン管理システム</div>
+      </div>
+    </a>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="container-sm" style="padding-top:var(--sp-xl)">
+
+    <!-- ローディング表示 -->
+    <div id="loadingEl" class="loading">
+      <div class="spinner"></div>
+      <span>読み込み中...</span>
+    </div>
+
+    <!-- クレーンコンテンツ（初期は非表示） -->
+    <div id="craneContent" class="hidden">
+
+      <!-- クレーン情報カード -->
+      <div id="craneInfo"></div>
+
+      <!-- メンテナンス状態 -->
+      <h2 style="font-size:var(--font-size-lg);font-weight:700;color:var(--color-primary);
+                 margin-bottom:var(--sp-md);display:flex;align-items:center;gap:var(--sp-sm)">
+        <i class="fas fa-clipboard-check" style="color:var(--color-accent)"></i>
+        メンテナンス状態
+      </h2>
+
+      <div id="maintCards" class="grid"></div>
+
+      <!-- 操作ボタン -->
+      <div style="display:flex;flex-direction:column;gap:var(--sp-md);margin-top:var(--sp-xl)">
+        <a id="btnMaintenance" href="#" class="btn btn-accent btn-lg btn-block">
+          <i class="fas fa-wrench"></i> メンテナンスを記録する
+        </a>
+        <a id="btnHistory" href="#" class="btn btn-outline btn-lg btn-block">
+          <i class="fas fa-history"></i> 履歴を見る
+        </a>
+      </div>
+
+    </div><!-- /craneContent -->
+
+  </main>
+
+  <!-- スクリプト読み込み -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/crane.js"></script>
+
+</body>
+</html>

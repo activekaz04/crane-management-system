@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クレーン管理 | サンワクレーン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <a class="header-brand" href="admin-dashboard.html">
+      <img class="header-logo"
+           src="http://sanwacrane.jp/images/logo4.png"
+           alt="サンワクレーン"
+           onerror="this.style.display='none'">
+      <div class="header-brand-text">
+        <div class="header-title">サンワクレーン</div>
+        <div class="header-subtitle">クレーン管理</div>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <button onclick="Auth.logout()"><i class="fas fa-sign-out-alt"></i> ログアウト</button>
+    </nav>
+  </header>
+
+  <!-- 管理者ナビ -->
+  <nav class="admin-nav">
+    <a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> ダッシュボード</a>
+    <a href="admin-cranes.html" class="active"><i class="fas fa-truck-moving"></i> クレーン管理</a>
+    <a href="qr-generator.html"><i class="fas fa-qrcode"></i> QRコード生成</a>
+  </nav>
+
+  <!-- メインコンテンツ -->
+  <main class="container" style="padding-top:var(--sp-xl)">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-lg);flex-wrap:wrap;gap:var(--sp-sm)">
+      <h1 class="page-title" style="margin-bottom:0">
+        <i class="fas fa-truck-moving"></i> クレーン管理
+      </h1>
+      <button id="btnAddCrane" class="btn btn-accent">
+        <i class="fas fa-plus"></i> クレーンを追加
+      </button>
+    </div>
+
+    <!-- クレーン一覧 -->
+    <div id="craneList">
+      <div class="loading"><div class="spinner"></div><span>読み込み中...</span></div>
+    </div>
+
+  </main>
+
+  <!-- スクリプト読み込み -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/admin-cranes.js"></script>
+
+</body>
+</html>

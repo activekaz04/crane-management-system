@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サンワクレーン クレーン管理システム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .landing-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(145deg, var(--color-primary-dark) 0%, var(--color-primary-light) 100%);
+      padding: var(--sp-xl);
+    }
+    .landing-logo    { height: 80px; object-fit: contain; margin-bottom: var(--sp-lg); }
+    .landing-title   { font-size: var(--font-size-xxl); font-weight: 700; color: var(--color-accent); margin-bottom: var(--sp-sm); }
+    .landing-sub     { font-size: var(--font-size-lg); color: rgba(255,255,255,0.8); margin-bottom: var(--sp-xl); }
+    .landing-cards   { display: flex; gap: var(--sp-lg); flex-wrap: wrap; justify-content: center; max-width: 700px; }
+    .landing-card    {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(201,168,76,0.4);
+      border-radius: var(--radius-xl);
+      padding: var(--sp-xl) var(--sp-xxl);
+      color: white;
+      text-decoration: none;
+      transition: all 0.2s;
+      min-width: 240px;
+    }
+    .landing-card:hover { background: rgba(255,255,255,0.15); border-color: var(--color-accent); color: white; transform: translateY(-4px); }
+    .landing-card i     { font-size: 3rem; color: var(--color-accent); margin-bottom: var(--sp-md); display: block; }
+    .landing-card h2    { font-size: var(--font-size-xl); font-weight: 700; margin-bottom: var(--sp-sm); }
+    .landing-card p     { font-size: var(--font-size-sm); color: rgba(255,255,255,0.7); }
+  </style>
+</head>
+<body>
+  <div class="landing-hero">
+    <img class="landing-logo"
+         src="http://sanwacrane.jp/images/logo3.png"
+         alt="サンワクレーン株式会社"
+         onerror="this.style.display='none'">
+    <div class="landing-title">クレーン管理システム</div>
+    <div class="landing-sub">サンワクレーン株式会社</div>
+
+    <div class="landing-cards">
+      <!-- 現場作業員向け -->
+      <div class="landing-card" style="cursor:default">
+        <i class="fas fa-qrcode"></i>
+        <h2>現場作業員の方</h2>
+        <p>各クレーンに貼付されたQRコードをスマートフォンで読み込んでください。</p>
+      </div>
+
+      <!-- 管理者向け -->
+      <a href="admin-login.html" class="landing-card">
+        <i class="fas fa-user-shield"></i>
+        <h2>管理者ログイン</h2>
+        <p>管理者パスワードでログインしてすべての機能にアクセスできます。</p>
+      </a>
+    </div>
+
+    <div style="margin-top:var(--sp-xxl);color:rgba(255,255,255,0.4);font-size:var(--font-size-sm)">
+      &copy; サンワクレーン株式会社
+    </div>
+  </div>
+</body>
+</html>

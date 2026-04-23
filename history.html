@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メンテナンス履歴 | サンワクレーン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <a class="header-brand" href="#">
+      <img class="header-logo"
+           src="http://sanwacrane.jp/images/logo4.png"
+           alt="サンワクレーン"
+           onerror="this.style.display='none'">
+      <div class="header-brand-text">
+        <div class="header-title">メンテナンス履歴</div>
+        <div class="header-subtitle" id="vehicleNumberDisplay">—</div>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <a id="btnBack" href="crane.html">
+        <i class="fas fa-arrow-left"></i> 戻る
+      </a>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="container-sm" style="padding-top:var(--sp-xl)">
+
+    <div id="historyContent">
+      <!-- 対象クレーン -->
+      <div class="crane-info-card" style="margin-bottom:var(--sp-lg)">
+        <div style="font-size:var(--font-size-sm);color:rgba(255,255,255,0.7);margin-bottom:4px">対象クレーン</div>
+        <div class="crane-vehicle-number" id="vehicleNumberDisplay2">—</div>
+        <div style="color:rgba(255,255,255,0.85)" id="craneNameDisplay">—</div>
+      </div>
+
+      <!-- フィルターバー -->
+      <div class="filter-bar" id="filterBar"></div>
+
+      <!-- 履歴リスト -->
+      <div id="historyList" class="history-list"></div>
+    </div>
+
+  </main>
+
+  <!-- スクリプト読み込み -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/history.js"></script>
+
+</body>
+</html>

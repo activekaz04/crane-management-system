@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クレーン詳細（管理者）| サンワクレーン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <a class="header-brand" href="admin-dashboard.html">
+      <img class="header-logo"
+           src="http://sanwacrane.jp/images/logo4.png"
+           alt="サンワクレーン"
+           onerror="this.style.display='none'">
+      <div class="header-brand-text">
+        <div class="header-title" id="pageHeading">クレーン詳細</div>
+        <div class="header-subtitle" id="pageSubheading">管理者</div>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <a href="admin-cranes.html"><i class="fas fa-arrow-left"></i> 一覧</a>
+      <button onclick="Auth.logout()"><i class="fas fa-sign-out-alt"></i></button>
+    </nav>
+  </header>
+
+  <!-- 管理者ナビ -->
+  <nav class="admin-nav">
+    <a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> ダッシュボード</a>
+    <a href="admin-cranes.html" class="active"><i class="fas fa-truck-moving"></i> クレーン管理</a>
+    <a href="qr-generator.html"><i class="fas fa-qrcode"></i> QRコード生成</a>
+  </nav>
+
+  <!-- メインコンテンツ -->
+  <main class="container" style="padding-top:var(--sp-xl)">
+
+    <div class="grid grid-2" style="align-items:start">
+
+      <!-- 左：クレーン情報編集 -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-truck-moving"></i> クレーン基本情報
+        </div>
+        <div class="card-body">
+          <form id="craneEditForm">
+            <div class="form-group">
+              <label class="form-label">車番 <span class="required">*</span></label>
+              <input type="text" id="fieldVehicleNumber" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">クレーン名 <span class="required">*</span></label>
+              <input type="text" id="fieldName" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">型番・型式</label>
+              <input type="text" id="fieldModel" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label">設置場所</label>
+              <input type="text" id="fieldLocation" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label">ステータス</label>
+              <select id="fieldStatus" class="form-control">
+                <option value="active">稼働中</option>
+                <option value="maintenance">メンテナンス中</option>
+                <option value="retired">引退</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">備考</label>
+              <textarea id="fieldNotes" class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-accent btn-block">
+              <i class="fas fa-save"></i> 情報を保存
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 右：メンテナンス記録 -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-clipboard-list"></i> メンテナンス記録
+          <button id="btnAddMaint" class="btn btn-sm btn-accent" style="margin-left:auto">
+            <i class="fas fa-plus"></i> 追加
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>種別</th>
+                <th>実施日</th>
+                <th>次回予定</th>
+                <th>担当者</th>
+                <th>備考</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="maintTableBody">
+              <tr><td colspan="6" class="text-center">読み込み中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /grid -->
+
+  </main>
+
+  <!-- スクリプト読み込み -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/admin-crane.js"></script>
+
+</body>
+</html>

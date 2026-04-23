@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRコード生成 | サンワクレーン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="header no-print">
+    <a class="header-brand" href="admin-dashboard.html">
+      <img class="header-logo"
+           src="http://sanwacrane.jp/images/logo4.png"
+           alt="サンワクレーン"
+           onerror="this.style.display='none'">
+      <div class="header-brand-text">
+        <div class="header-title">サンワクレーン</div>
+        <div class="header-subtitle">QRコード生成</div>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <button onclick="Auth.logout()"><i class="fas fa-sign-out-alt"></i> ログアウト</button>
+    </nav>
+  </header>
+
+  <!-- 管理者ナビ -->
+  <nav class="admin-nav no-print">
+    <a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> ダッシュボード</a>
+    <a href="admin-cranes.html"><i class="fas fa-truck-moving"></i> クレーン管理</a>
+    <a href="qr-generator.html" class="active"><i class="fas fa-qrcode"></i> QRコード生成</a>
+  </nav>
+
+  <!-- メインコンテンツ -->
+  <main class="container" style="padding-top:var(--sp-xl)">
+
+    <!-- 操作バー -->
+    <div class="card no-print" style="margin-bottom:var(--sp-lg)">
+      <div class="card-body">
+        <div style="display:flex;align-items:flex-end;gap:var(--sp-md);flex-wrap:wrap">
+          <div class="form-group" style="flex:1;min-width:260px;margin-bottom:0">
+            <label class="form-label">
+              <i class="fas fa-link"></i> ベースURL
+              <span class="form-hint" style="font-weight:400;margin-left:8px">QRコードのリンク先URLのベース部分</span>
+            </label>
+            <input type="text" id="baseUrlInput" class="form-control"
+                   placeholder="例：https://yourserver.com/crane-system/">
+          </div>
+          <button id="btnRegenerate" class="btn btn-primary">
+            <i class="fas fa-sync-alt"></i> 再生成
+          </button>
+          <button id="btnPrintAll" class="btn btn-outline">
+            <i class="fas fa-print"></i> 全件印刷
+          </button>
+        </div>
+        <p class="form-hint" style="margin-top:var(--sp-sm)">
+          <i class="fas fa-info-circle"></i>
+          ローカルファイルで使用する場合はベースURLをそのままにしてください。
+          Webサーバーで公開する場合は実際のURLに変更してください。
+        </p>
+      </div>
+    </div>
+
+    <!-- QRコードグリッド -->
+    <div id="qrGrid" class="qr-grid">
+      <div class="loading" style="grid-column:1/-1">
+        <div class="spinner"></div><span>生成中...</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- スクリプト読み込み -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/qr.js"></script>
+
+</body>
+</html>
