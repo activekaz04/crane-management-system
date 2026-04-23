@@ -70,7 +70,12 @@ function openCraneModal(craneId) {
           <div class="form-group"><label class="form-label">車番 <span class="required">*</span></label>
             <input type="text" class="form-control" id="cVehicleNumber" value="${crane ? crane.vehicleNumber : ''}" placeholder="例：奈良100 あ 1234" required></div>
           <div class="form-group"><label class="form-label">メーカー</label>
-            <input type="text" class="form-control" id="cMaker" value="${crane ? (crane.maker || '') : ''}" placeholder="例：タダノ、コベルコ"></div>
+            <select class="form-control" id="cMaker">
+              <option value="">— 選択してください —</option>
+              ${['LIEBHERR','TADANO','KATO','KOBELCO','SUMITOMO'].map(m =>
+                `<option value="${m}" ${crane && crane.maker === m ? 'selected' : ''}>${m}</option>`
+              ).join('')}
+            </select></div>
           <div class="form-group"><label class="form-label">トン数 <span class="required">*</span></label>
             <input type="text" class="form-control" id="cTonnage" value="${crane ? (crane.tonnage || '') : ''}" placeholder="例：25t" required></div>
           <div class="form-group"><label class="form-label">型番・型式</label>
