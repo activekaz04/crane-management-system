@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   } catch (e) {
     console.error(e);
-    showError('データの読み込みに失敗しました。通信環境を確認してください。');
+    showError(`エラー: ${e.code || ''} ${e.message || e}`);
   }
 });
 
