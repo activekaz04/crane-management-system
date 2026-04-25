@@ -69,10 +69,10 @@
       window.location.href = 'admin-dashboard.html';
     }
 
-    document.getElementById('loginForm').addEventListener('submit', e => {
+    document.getElementById('loginForm').addEventListener('submit', async e => {
       e.preventDefault();
       const pw = document.getElementById('passwordInput').value;
-      if (Auth.login(pw)) {
+      if (await Auth.login(pw)) {
         window.location.href = 'admin-dashboard.html';
       } else {
         document.getElementById('errorMsg').classList.remove('hidden');
