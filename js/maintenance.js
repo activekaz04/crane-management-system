@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.title = `メンテナンス入力 | ${crane.vehicleNumber}`;
     document.getElementById('vehicleNumberDisplay').textContent  = crane.vehicleNumber;
     document.getElementById('vehicleNumberDisplay2').textContent = crane.vehicleNumber;
-    document.getElementById('craneNameDisplay').textContent      = crane.name;
+    document.getElementById('craneNameDisplay').textContent      = crane.tonnage || crane.name || '';
     document.getElementById('btnBack').href       = `crane.html?id=${currentCraneId}`;
     document.getElementById('btnBackBottom').href = `crane.html?id=${currentCraneId}`;
 
