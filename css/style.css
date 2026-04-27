@@ -1013,6 +1013,10 @@ textarea.form-control { min-height: 100px; resize: vertical; }
 .stat-card.stat-success .stat-value { color: var(--color-success); }
 .stat-card.stat-success::before { background: linear-gradient(135deg, #16a34a, #4ade80); }
 
+.stat-card.stat-info .stat-icon,
+.stat-card.stat-info .stat-value  { color: #4f46e5; }
+.stat-card.stat-info::before { background: linear-gradient(135deg, #4338ca, #818cf8); }
+
 @keyframes pulse-card {
   0%, 100% { box-shadow: var(--shadow-md); }
   50%       { box-shadow: var(--shadow-md), 0 0 24px rgba(220,38,38,0.20); }
