@@ -129,6 +129,35 @@ const DataStore = {
   },
 
   /* ============================================================
+     点検記録 CRUD
+     ============================================================ */
+
+  async getInspectionRecords(craneId) {
+    const snap = await db.collection('inspections').where('craneId', '==', craneId).get();
+    const list = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    return list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  },
+
+  async getInspectionRecord(id) {
+    const doc = await db.collection('inspections').doc(id).get();
+    return doc.exists ? { ...doc.data(), id: doc.id } : null;
+  },
+
+  async saveInspectionRecord(record) {
+    if (!record.id) {
+      record.id        = this._generateId('I');
+      record.createdAt = new Date().toISOString();
+    }
+    record.updatedAt = new Date().toISOString();
+    await db.collection('inspections').doc(record.id).set(record);
+    return record;
+  },
+
+  async deleteInspectionRecord(id) {
+    await db.collection('inspections').doc(id).delete();
+  },
+
+  /* ============================================================
      ユーティリティ
      ============================================================ */
 

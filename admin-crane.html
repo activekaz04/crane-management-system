@@ -40,23 +40,22 @@
   <!-- メインコンテンツ -->
   <main class="container" style="padding-top:var(--sp-xl)">
 
-    <div class="grid grid-2" style="align-items:start">
-
-      <!-- 左：クレーン情報編集 -->
-      <div class="card">
-        <div class="card-header">
-          <i class="fas fa-truck-moving"></i> クレーン基本情報
-        </div>
-        <div class="card-body">
-          <form id="craneEditForm">
-            <div class="form-group">
+    <!-- 上段：クレーン基本情報（横幅いっぱい） -->
+    <div class="card" style="margin-bottom:var(--sp-lg)">
+      <div class="card-header">
+        <i class="fas fa-truck-moving"></i> クレーン基本情報
+      </div>
+      <div class="card-body">
+        <form id="craneEditForm">
+          <div class="grid grid-3" style="gap:var(--sp-md)">
+            <div class="form-group" style="margin-bottom:0">
               <label class="form-label">車番 <span class="required">*</span></label>
               <input type="text" id="fieldVehicleNumber" class="form-control" required>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0">
               <label class="form-label">メーカー</label>
               <select id="fieldMaker" class="form-control">
-                <option value="">— 選択してください —</option>
+                <option value="">— 選択 —</option>
                 <option value="LIEBHERR">LIEBHERR</option>
                 <option value="TADANO">TADANO</option>
                 <option value="KATO">KATO</option>
@@ -64,15 +63,15 @@
                 <option value="SUMITOMO">SUMITOMO</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0">
               <label class="form-label">トン数 <span class="required">*</span></label>
               <input type="text" id="fieldTonnage" class="form-control" placeholder="例：25t" required>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0">
               <label class="form-label">型番・型式</label>
               <input type="text" id="fieldModel" class="form-control">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0">
               <label class="form-label">ステータス</label>
               <select id="fieldStatus" class="form-control">
                 <option value="active">稼働中</option>
@@ -80,18 +79,24 @@
                 <option value="retired">引退</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0">
               <label class="form-label">備考</label>
-              <textarea id="fieldNotes" class="form-control" rows="3"></textarea>
+              <input type="text" id="fieldNotes" class="form-control">
             </div>
-            <button type="submit" class="btn btn-accent btn-block">
+          </div>
+          <div style="margin-top:var(--sp-md);text-align:right">
+            <button type="submit" class="btn btn-accent">
               <i class="fas fa-save"></i> 情報を保存
             </button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
+    </div>
 
-      <!-- 右：メンテナンス記録 -->
+    <!-- 下段：メンテナンス記録 ＋ 点検記録 -->
+    <div class="grid grid-2" style="align-items:start">
+
+      <!-- 左：メンテナンス記録 -->
       <div class="card">
         <div class="card-header">
           <i class="fas fa-clipboard-list"></i> メンテナンス記録
@@ -113,6 +118,32 @@
             </thead>
             <tbody id="maintTableBody">
               <tr><td colspan="6" class="text-center">読み込み中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 右：点検記録 -->
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-search"></i> 点検記録
+          <button id="btnAddInspection" class="btn btn-sm btn-accent" style="margin-left:auto">
+            <i class="fas fa-plus"></i> 追加
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>オイル残量</th>
+                <th>タイヤ空気圧（kPa）</th>
+                <th>担当者</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="inspectionTableBody">
+              <tr><td colspan="5" class="text-center">読み込み中...</td></tr>
             </tbody>
           </table>
         </div>
