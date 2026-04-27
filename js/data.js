@@ -9,9 +9,16 @@
 
 /* ─── メンテナンス種別定義（拡張時はここに追加） ─── */
 const MAINT_TYPES = [
-  { key: 'engine_oil',    label: 'エンジンオイル交換', icon: 'fa-oil-can' },
-  { key: 'coolant',       label: 'クーラント交換',     icon: 'fa-temperature-half' },
-  { key: 'tire_pressure', label: 'タイヤ空気圧点検',   icon: 'fa-circle-dot' },
+  { key: 'engine_oil',             label: 'エンジンオイル交換',               icon: 'fa-oil-can'          },
+  { key: 'engine_oil_filter',      label: 'エンジンオイルフィルター交換',     icon: 'fa-filter'           },
+  { key: 'fuel_filter',            label: '燃料フィルター交換',               icon: 'fa-gas-pump'         },
+  { key: 'blowby_filter',          label: 'ブローバイフィルター交換',         icon: 'fa-wind'             },
+  { key: 'water_separator_filter', label: 'ウォーターセパレーターフィルター交換', icon: 'fa-water'         },
+  { key: 'air_dryer_filter',       label: 'エアドライヤーフィルター交換',     icon: 'fa-fan'              },
+  { key: 'coolant',                label: 'クーラント交換',                   icon: 'fa-temperature-half' },
+  { key: 'hydraulic_oil',          label: '作動油交換',                       icon: 'fa-droplet'          },
+  { key: 'hydraulic_oil_filter',   label: '作動油フィルター交換',             icon: 'fa-filter'           },
+  { key: 'other',                  label: 'その他',                           icon: 'fa-wrench'           },
 ];
 
 /* ─── サンプルデータ ─── */

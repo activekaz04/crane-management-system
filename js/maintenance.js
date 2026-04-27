@@ -84,26 +84,12 @@ function buildFormHtml(t) {
         <input type="text" class="form-control" name="${t.key}_operator" placeholder="担当者名" required>
       </div>`;
 
+  const QUANTITY_TYPES = ['engine_oil', 'coolant', 'hydraulic_oil'];
   let extra = '';
-  if (t.key === 'engine_oil') {
+  if (QUANTITY_TYPES.includes(t.key)) {
     extra = `<div class="form-group">
       <label class="form-label">使用数量</label>
       <input type="text" class="form-control" name="${t.key}_quantity" placeholder="例：15L">
-    </div>`;
-  }
-  if (t.key === 'tire_pressure') {
-    extra = `<div class="form-group">
-      <label class="form-label">タイヤ空気圧（kPa）</label>
-      <div class="grid grid-2" style="gap:var(--sp-sm)">
-        <div><label class="form-label" style="font-size:var(--font-size-sm)">左前 (FL)</label>
-          <input type="number" class="form-control" name="${t.key}_fl" placeholder="700" min="0" max="1200"></div>
-        <div><label class="form-label" style="font-size:var(--font-size-sm)">右前 (FR)</label>
-          <input type="number" class="form-control" name="${t.key}_fr" placeholder="700" min="0" max="1200"></div>
-        <div><label class="form-label" style="font-size:var(--font-size-sm)">左後 (RL)</label>
-          <input type="number" class="form-control" name="${t.key}_rl" placeholder="700" min="0" max="1200"></div>
-        <div><label class="form-label" style="font-size:var(--font-size-sm)">右後 (RR)</label>
-          <input type="number" class="form-control" name="${t.key}_rr" placeholder="700" min="0" max="1200"></div>
-      </div>
     </div>`;
   }
 
@@ -133,8 +119,7 @@ async function handleSubmit(e) {
     notes:    g('notes'),
   };
 
-  if (typeKey === 'engine_oil')    record.quantity      = g('quantity');
-  if (typeKey === 'tire_pressure') record.tirePressures = { fl: g('fl'), fr: g('fr'), rl: g('rl'), rr: g('rr') };
+  if (['engine_oil', 'coolant', 'hydraulic_oil'].includes(typeKey)) record.quantity = g('quantity');
 
   try {
     const btn = document.querySelector('#maintenanceForm button[type="submit"]');

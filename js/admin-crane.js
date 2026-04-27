@@ -133,19 +133,6 @@ async function openMaintModal(recordId) {
             <label class="form-label">使用数量</label>
             <input type="text" class="form-control" id="mQuantity" value="${rec ? (rec.quantity || '') : ''}" placeholder="例：15L">
           </div>
-          <div id="tirePressureGroup">
-            <label class="form-label">タイヤ空気圧（kPa）</label>
-            <div class="grid grid-2" style="gap:var(--sp-sm);margin-bottom:var(--sp-lg)">
-              <div><label class="form-label" style="font-size:var(--font-size-sm)">左前 (FL)</label>
-                <input type="number" class="form-control" id="mFL" value="${rec && rec.tirePressures ? rec.tirePressures.fl : ''}" placeholder="700"></div>
-              <div><label class="form-label" style="font-size:var(--font-size-sm)">右前 (FR)</label>
-                <input type="number" class="form-control" id="mFR" value="${rec && rec.tirePressures ? rec.tirePressures.fr : ''}" placeholder="700"></div>
-              <div><label class="form-label" style="font-size:var(--font-size-sm)">左後 (RL)</label>
-                <input type="number" class="form-control" id="mRL" value="${rec && rec.tirePressures ? rec.tirePressures.rl : ''}" placeholder="700"></div>
-              <div><label class="form-label" style="font-size:var(--font-size-sm)">右後 (RR)</label>
-                <input type="number" class="form-control" id="mRR" value="${rec && rec.tirePressures ? rec.tirePressures.rr : ''}" placeholder="700"></div>
-            </div>
-          </div>
           <div class="form-group">
             <label class="form-label">備考</label>
             <textarea class="form-control" id="mNotes" rows="3">${rec ? (rec.notes || '') : ''}</textarea>
@@ -164,8 +151,8 @@ async function openMaintModal(recordId) {
 }
 
 function toggleExtraFields(typeKey) {
-  document.getElementById('quantityGroup')?.classList.toggle('hidden',     typeKey !== 'engine_oil');
-  document.getElementById('tirePressureGroup')?.classList.toggle('hidden', typeKey !== 'tire_pressure');
+  const showQty = ['engine_oil', 'coolant', 'hydraulic_oil'].includes(typeKey);
+  document.getElementById('quantityGroup')?.classList.toggle('hidden', !showQty);
 }
 
 async function saveMaintRecord(recordId) {
@@ -186,8 +173,7 @@ async function saveMaintRecord(recordId) {
     operator, notes: document.getElementById('mNotes').value.trim(),
   };
 
-  if (typeKey === 'engine_oil')    record.quantity      = document.getElementById('mQuantity').value.trim();
-  if (typeKey === 'tire_pressure') record.tirePressures = { fl: document.getElementById('mFL').value, fr: document.getElementById('mFR').value, rl: document.getElementById('mRL').value, rr: document.getElementById('mRR').value };
+  if (['engine_oil', 'coolant', 'hydraulic_oil'].includes(typeKey)) record.quantity = document.getElementById('mQuantity').value.trim();
 
   await DataStore.saveMaintenanceRecord(record);
   document.getElementById('maintModal').remove();
