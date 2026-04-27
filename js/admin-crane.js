@@ -212,22 +212,30 @@ async function loadInspectionRecords() {
   const tbody   = document.getElementById('inspectionTableBody');
 
   if (records.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted" style="padding:24px">記録がありません</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted" style="padding:24px">記録がありません</td></tr>`;
     return;
   }
 
+  const LEVEL = { full:'満タン', three_quarter:'3/4', half:'1/2', quarter:'1/4', low:'要補充' };
+  const ITEM_LABELS = { engineOil:'エンジンオイル', coolant:'クーラント', tirePressure:'タイヤ空気圧', hydraulicOil:'作動油', other:'その他' };
+
   tbody.innerHTML = records.map(r => {
-    const tp = r.tirePressures || {};
-    const tireText = (tp.fl || tp.fr || tp.rl || tp.rr)
-      ? `FL:${tp.fl||'—'} FR:${tp.fr||'—'}<br>RL:${tp.rl||'—'} RR:${tp.rr||'—'}`
-      : '—';
-    const oilLabel = { full: '満タン', three_quarter: '3/4', half: '1/2', quarter: '1/4', low: '要補充' };
     const sectionLabel = r.section === 'upper' ? 'アッパー' : r.section === 'carrier' ? 'キャリア' : '—';
+    let itemSummary = '—';
+    if (r.items && Object.keys(r.items).length > 0) {
+      itemSummary = Object.entries(r.items).map(([key, val]) => {
+        const label = ITEM_LABELS[key] || key;
+        if (val.level) return `${label}(${LEVEL[val.level] || val.level})`;
+        if (key === 'tirePressure') return label;
+        return label;
+      }).join('<br>');
+    } else if (r.oilLevel) {
+      itemSummary = `エンジンオイル(${LEVEL[r.oilLevel] || r.oilLevel})`;
+    }
     return `<tr>
       <td>${formatDate(r.date)}</td>
       <td>${sectionLabel}</td>
-      <td>${oilLabel[r.oilLevel] || r.oilLevel || '—'}</td>
-      <td style="font-size:var(--font-size-xs);line-height:1.6">${tireText}</td>
+      <td style="font-size:var(--font-size-xs);line-height:1.8">${itemSummary}</td>
       <td>${r.operator || '—'}</td>
       <td>
         <div style="display:flex;gap:6px">

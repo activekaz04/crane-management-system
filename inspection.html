@@ -31,7 +31,6 @@
 
   <!-- メインコンテンツ -->
   <main class="container-sm" style="padding-top:var(--sp-xl)">
-
     <div id="formWrapper">
 
       <!-- 対象クレーン表示 -->
@@ -43,7 +42,6 @@
 
       <!-- フォーム -->
       <form id="inspectionForm">
-
         <div class="form-section">
           <div class="form-section-title"><i class="fas fa-search"></i>点検記録</div>
 
@@ -67,42 +65,142 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label"><i class="fas fa-oil-can" style="color:var(--color-accent)"></i> オイル残量</label>
-            <select class="form-control" id="iOilLevel">
-              <option value="">— 選択してください —</option>
-              <option value="full">満タン</option>
-              <option value="three_quarter">3/4</option>
-              <option value="half">1/2</option>
-              <option value="quarter">1/4</option>
-              <option value="low">要補充</option>
-            </select>
-          </div>
+            <label class="form-label">
+              点検項目
+              <span style="font-weight:400;font-size:var(--font-size-sm);color:var(--color-text-muted);margin-left:6px">タップして選択・入力</span>
+            </label>
 
-          <div class="form-group">
-            <label class="form-label"><i class="fas fa-circle-dot" style="color:var(--color-accent)"></i> タイヤ空気圧（kPa）</label>
-            <div class="grid grid-2" style="gap:var(--sp-sm)">
-              <div>
-                <label class="form-label" style="font-size:var(--font-size-sm)">左前 (FL)</label>
-                <input type="number" class="form-control" id="iFL" placeholder="700" min="0" max="1200">
+            <!-- エンジンオイル -->
+            <div class="insp-item-card" id="card-engineOil">
+              <div class="insp-item-toggle" onclick="toggleItem('engineOil')">
+                <i class="fas fa-oil-can item-icon"></i>
+                <span class="item-label">エンジンオイル</span>
+                <i class="fas fa-chevron-down insp-item-arrow"></i>
               </div>
-              <div>
-                <label class="form-label" style="font-size:var(--font-size-sm)">右前 (FR)</label>
-                <input type="number" class="form-control" id="iFR" placeholder="700" min="0" max="1200">
-              </div>
-              <div>
-                <label class="form-label" style="font-size:var(--font-size-sm)">左後 (RL)</label>
-                <input type="number" class="form-control" id="iRL" placeholder="700" min="0" max="1200">
-              </div>
-              <div>
-                <label class="form-label" style="font-size:var(--font-size-sm)">右後 (RR)</label>
-                <input type="number" class="form-control" id="iRR" placeholder="700" min="0" max="1200">
+              <div class="insp-item-detail hidden" id="detail-engineOil">
+                <div class="form-group">
+                  <label class="form-label">残量</label>
+                  <select class="form-control" id="item-engineOil-level">
+                    <option value="">— 選択 —</option>
+                    <option value="full">満タン</option>
+                    <option value="three_quarter">3/4</option>
+                    <option value="half">1/2</option>
+                    <option value="quarter">1/4</option>
+                    <option value="low">要補充</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">備考</label>
+                  <input type="text" class="form-control" id="item-engineOil-notes" placeholder="特記事項">
+                </div>
               </div>
             </div>
-          </div>
+
+            <!-- クーラント -->
+            <div class="insp-item-card" id="card-coolant">
+              <div class="insp-item-toggle" onclick="toggleItem('coolant')">
+                <i class="fas fa-temperature-half item-icon"></i>
+                <span class="item-label">クーラント</span>
+                <i class="fas fa-chevron-down insp-item-arrow"></i>
+              </div>
+              <div class="insp-item-detail hidden" id="detail-coolant">
+                <div class="form-group">
+                  <label class="form-label">残量</label>
+                  <select class="form-control" id="item-coolant-level">
+                    <option value="">— 選択 —</option>
+                    <option value="full">満タン</option>
+                    <option value="three_quarter">3/4</option>
+                    <option value="half">1/2</option>
+                    <option value="quarter">1/4</option>
+                    <option value="low">要補充</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">備考</label>
+                  <input type="text" class="form-control" id="item-coolant-notes" placeholder="特記事項">
+                </div>
+              </div>
+            </div>
+
+            <!-- タイヤ空気圧 -->
+            <div class="insp-item-card" id="card-tirePressure">
+              <div class="insp-item-toggle" onclick="toggleItem('tirePressure')">
+                <i class="fas fa-circle-dot item-icon"></i>
+                <span class="item-label">タイヤ空気圧</span>
+                <i class="fas fa-chevron-down insp-item-arrow"></i>
+              </div>
+              <div class="insp-item-detail hidden" id="detail-tirePressure">
+                <div class="grid grid-2" style="gap:var(--sp-sm)">
+                  <div>
+                    <label class="form-label" style="font-size:var(--font-size-sm)">左前 FL (kPa)</label>
+                    <input type="number" class="form-control" id="item-tire-fl" placeholder="700" min="0" max="1200">
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-size:var(--font-size-sm)">右前 FR (kPa)</label>
+                    <input type="number" class="form-control" id="item-tire-fr" placeholder="700" min="0" max="1200">
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-size:var(--font-size-sm)">左後 RL (kPa)</label>
+                    <input type="number" class="form-control" id="item-tire-rl" placeholder="700" min="0" max="1200">
+                  </div>
+                  <div>
+                    <label class="form-label" style="font-size:var(--font-size-sm)">右後 RR (kPa)</label>
+                    <input type="number" class="form-control" id="item-tire-rr" placeholder="700" min="0" max="1200">
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top:var(--sp-sm)">
+                  <label class="form-label">備考</label>
+                  <input type="text" class="form-control" id="item-tirePressure-notes" placeholder="特記事項">
+                </div>
+              </div>
+            </div>
+
+            <!-- 作動油 -->
+            <div class="insp-item-card" id="card-hydraulicOil">
+              <div class="insp-item-toggle" onclick="toggleItem('hydraulicOil')">
+                <i class="fas fa-droplet item-icon"></i>
+                <span class="item-label">作動油</span>
+                <i class="fas fa-chevron-down insp-item-arrow"></i>
+              </div>
+              <div class="insp-item-detail hidden" id="detail-hydraulicOil">
+                <div class="form-group">
+                  <label class="form-label">残量</label>
+                  <select class="form-control" id="item-hydraulicOil-level">
+                    <option value="">— 選択 —</option>
+                    <option value="full">満タン</option>
+                    <option value="three_quarter">3/4</option>
+                    <option value="half">1/2</option>
+                    <option value="quarter">1/4</option>
+                    <option value="low">要補充</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">備考</label>
+                  <input type="text" class="form-control" id="item-hydraulicOil-notes" placeholder="特記事項">
+                </div>
+              </div>
+            </div>
+
+            <!-- その他 -->
+            <div class="insp-item-card" id="card-other">
+              <div class="insp-item-toggle" onclick="toggleItem('other')">
+                <i class="fas fa-ellipsis item-icon"></i>
+                <span class="item-label">その他</span>
+                <i class="fas fa-chevron-down insp-item-arrow"></i>
+              </div>
+              <div class="insp-item-detail hidden" id="detail-other">
+                <div class="form-group">
+                  <label class="form-label">内容・備考</label>
+                  <textarea class="form-control" id="item-other-notes" rows="3" placeholder="点検内容を記入"></textarea>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /点検項目 -->
 
           <div class="form-group mb-0">
-            <label class="form-label">備考</label>
-            <textarea class="form-control" id="iNotes" rows="3" placeholder="特記事項があれば記入"></textarea>
+            <label class="form-label">全体備考</label>
+            <textarea class="form-control" id="iNotes" rows="2" placeholder="全体的な特記事項があれば記入"></textarea>
           </div>
         </div>
 
@@ -114,13 +212,10 @@
             <i class="fas fa-times"></i> キャンセル
           </a>
         </div>
-
       </form>
     </div>
-
   </main>
 
-  <!-- スクリプト読み込み -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="js/firebase-config.js"></script>

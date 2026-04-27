@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('craneNameDisplay').textContent      = crane.tonnage || crane.name || '';
     document.getElementById('btnBack').href       = `crane.html?id=${craneId}`;
     document.getElementById('btnBackBottom').href = `crane.html?id=${craneId}`;
-
     document.getElementById('iDate').value = new Date().toISOString().split('T')[0];
 
     document.getElementById('inspectionForm').addEventListener('submit', e => handleSubmit(e, craneId));
@@ -28,32 +27,53 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+function toggleItem(key) {
+  const card   = document.getElementById(`card-${key}`);
+  const detail = document.getElementById(`detail-${key}`);
+  const isSelected = card.classList.toggle('selected');
+  detail.classList.toggle('hidden', !isSelected);
+}
+
 async function handleSubmit(e, craneId) {
   e.preventDefault();
 
   const date     = document.getElementById('iDate').value;
   const operator = document.getElementById('iOperator').value.trim();
-  if (!date || !operator) {
-    showToast('点検日と担当者は必須です', 'error');
-    return;
+  const section  = document.getElementById('iSection').value;
+
+  if (!date || !operator) { showToast('点検日と担当者は必須です', 'error'); return; }
+  if (!section)           { showToast('部位を選択してください', 'error'); return; }
+
+  const selectedItems = document.querySelectorAll('.insp-item-card.selected');
+  if (selectedItems.length === 0) { showToast('点検項目を1つ以上選択してください', 'error'); return; }
+
+  const val = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+
+  const items = {};
+  if (document.getElementById('card-engineOil').classList.contains('selected')) {
+    items.engineOil = { level: val('item-engineOil-level'), notes: val('item-engineOil-notes') };
+  }
+  if (document.getElementById('card-coolant').classList.contains('selected')) {
+    items.coolant = { level: val('item-coolant-level'), notes: val('item-coolant-notes') };
+  }
+  if (document.getElementById('card-tirePressure').classList.contains('selected')) {
+    items.tirePressure = {
+      fl: val('item-tire-fl'), fr: val('item-tire-fr'),
+      rl: val('item-tire-rl'), rr: val('item-tire-rr'),
+      notes: val('item-tirePressure-notes'),
+    };
+  }
+  if (document.getElementById('card-hydraulicOil').classList.contains('selected')) {
+    items.hydraulicOil = { level: val('item-hydraulicOil-level'), notes: val('item-hydraulicOil-notes') };
+  }
+  if (document.getElementById('card-other').classList.contains('selected')) {
+    items.other = { notes: val('item-other-notes') };
   }
 
-  const section = document.getElementById('iSection').value;
-  if (!section) { showToast('部位を選択してください', 'error'); return; }
-
   const record = {
-    craneId,
-    date,
-    operator,
-    section,
-    oilLevel: document.getElementById('iOilLevel').value || null,
-    tirePressures: {
-      fl: document.getElementById('iFL').value,
-      fr: document.getElementById('iFR').value,
-      rl: document.getElementById('iRL').value,
-      rr: document.getElementById('iRR').value,
-    },
-    notes: document.getElementById('iNotes').value.trim(),
+    craneId, date, operator, section,
+    items,
+    notes: val('iNotes'),
   };
 
   try {
