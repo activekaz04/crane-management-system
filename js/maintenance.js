@@ -64,6 +64,14 @@ function buildFormHtml(t) {
     <div class="form-section">
       <div class="form-section-title"><i class="fas ${t.icon}"></i>${t.label}</div>
       <div class="form-group">
+        <label class="form-label">部位 <span class="required">*</span></label>
+        <select class="form-control" name="${t.key}_section" required>
+          <option value="">— 選択してください —</option>
+          <option value="carrier">キャリア</option>
+          <option value="upper">アッパー</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label class="form-label">実施日 <span class="required">*</span></label>
         <input type="date" class="form-control date-today-default" name="${t.key}_date" required>
       </div>
@@ -118,6 +126,7 @@ async function handleSubmit(e) {
   const record = {
     craneId:  currentCraneId,
     type:     typeKey,
+    section:  g('section'),
     date:     g('date'),
     nextDate: g('nextDate') || null,
     operator: g('operator'),

@@ -38,10 +38,14 @@ async function handleSubmit(e, craneId) {
     return;
   }
 
+  const section = document.getElementById('iSection').value;
+  if (!section) { showToast('部位を選択してください', 'error'); return; }
+
   const record = {
     craneId,
     date,
     operator,
+    section,
     oilLevel: document.getElementById('iOilLevel').value || null,
     tirePressures: {
       fl: document.getElementById('iFL').value,

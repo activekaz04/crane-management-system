@@ -66,8 +66,10 @@ async function loadMaintenanceRecords() {
     const label = DataStore.getMaintLabel(r.type);
     const icon  = DataStore.getMaintIcon(r.type);
     const st    = getDateStatus(getDaysUntil(r.nextDate));
+    const sectionLabel = r.section === 'upper' ? 'アッパー' : r.section === 'carrier' ? 'キャリア' : '—';
     return `<tr>
       <td><i class="fas ${icon} text-accent" style="margin-right:6px"></i>${label}</td>
+      <td>${sectionLabel}</td>
       <td>${formatDate(r.date)}</td>
       <td>${formatDate(r.nextDate)} <span class="badge ${st.badgeCls}">${st.label}</span></td>
       <td>${r.operator || '—'}</td>
@@ -106,6 +108,14 @@ async function openMaintModal(recordId) {
           <div class="form-group">
             <label class="form-label">種別 <span class="required">*</span></label>
             <select class="form-control" id="mType" required>${typeOptions}</select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">部位 <span class="required">*</span></label>
+            <select class="form-control" id="mSection" required>
+              <option value="">— 選択してください —</option>
+              <option value="carrier" ${rec && rec.section === 'carrier' ? 'selected' : ''}>キャリア</option>
+              <option value="upper"   ${rec && rec.section === 'upper'   ? 'selected' : ''}>アッパー</option>
+            </select>
           </div>
           <div class="form-group">
             <label class="form-label">実施日 <span class="required">*</span></label>
@@ -164,10 +174,14 @@ async function saveMaintRecord(recordId) {
   const operator = document.getElementById('mOperator').value.trim();
   if (!date || !operator) { showToast('実施日と担当者は必須です', 'error'); return; }
 
+  const section  = document.getElementById('mSection').value;
+  if (!section) { showToast('部位を選択してください', 'error'); return; }
+
   const record = {
     id:       recordId || undefined,
     craneId:  currentCraneId,
     type:     typeKey,
+    section,
     date, nextDate: document.getElementById('mNextDate').value || null,
     operator, notes: document.getElementById('mNotes').value.trim(),
   };
@@ -198,7 +212,7 @@ async function loadInspectionRecords() {
   const tbody   = document.getElementById('inspectionTableBody');
 
   if (records.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted" style="padding:24px">記録がありません</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted" style="padding:24px">記録がありません</td></tr>`;
     return;
   }
 
@@ -208,8 +222,10 @@ async function loadInspectionRecords() {
       ? `FL:${tp.fl||'—'} FR:${tp.fr||'—'}<br>RL:${tp.rl||'—'} RR:${tp.rr||'—'}`
       : '—';
     const oilLabel = { full: '満タン', three_quarter: '3/4', half: '1/2', quarter: '1/4', low: '要補充' };
+    const sectionLabel = r.section === 'upper' ? 'アッパー' : r.section === 'carrier' ? 'キャリア' : '—';
     return `<tr>
       <td>${formatDate(r.date)}</td>
+      <td>${sectionLabel}</td>
       <td>${oilLabel[r.oilLevel] || r.oilLevel || '—'}</td>
       <td style="font-size:var(--font-size-xs);line-height:1.6">${tireText}</td>
       <td>${r.operator || '—'}</td>
@@ -257,6 +273,14 @@ async function openInspectionModal(recordId) {
             <input type="text" class="form-control" id="iOperator" value="${rec ? (rec.operator || '') : ''}" placeholder="担当者名" required>
           </div>
           <div class="form-group">
+            <label class="form-label">部位 <span class="required">*</span></label>
+            <select class="form-control" id="iSection" required>
+              <option value="">— 選択してください —</option>
+              <option value="carrier" ${rec && rec.section === 'carrier' ? 'selected' : ''}>キャリア</option>
+              <option value="upper"   ${rec && rec.section === 'upper'   ? 'selected' : ''}>アッパー</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label class="form-label">オイル残量</label>
             <select class="form-control" id="iOilLevel">
               <option value="">— 選択 —</option>
@@ -296,11 +320,15 @@ async function saveInspection(recordId) {
   const operator = document.getElementById('iOperator').value.trim();
   if (!date || !operator) { showToast('点検日と担当者は必須です', 'error'); return; }
 
+  const iSection = document.getElementById('iSection').value;
+  if (!iSection) { showToast('部位を選択してください', 'error'); return; }
+
   const record = {
     id:       recordId || undefined,
     craneId:  currentCraneId,
     date,
     operator,
+    section:  iSection,
     oilLevel: document.getElementById('iOilLevel').value || null,
     tirePressures: {
       fl: document.getElementById('iFL').value,
