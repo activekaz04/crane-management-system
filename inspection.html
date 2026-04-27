@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>点検入力 | サンワクレーン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <a class="header-brand" href="#">
+      <img class="header-logo"
+           src="http://sanwacrane.jp/images/logo4.png"
+           alt="サンワクレーン"
+           onerror="this.style.display='none'">
+      <div class="header-brand-text">
+        <div class="header-title">点検入力</div>
+        <div class="header-subtitle" id="vehicleNumberDisplay">—</div>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <a id="btnBack" href="crane.html"><i class="fas fa-arrow-left"></i> 戻る</a>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="container-sm" style="padding-top:var(--sp-xl)">
+
+    <div id="formWrapper">
+
+      <!-- 対象クレーン表示 -->
+      <div class="crane-info-card" style="margin-bottom:var(--sp-lg)">
+        <div style="font-size:var(--font-size-sm);color:rgba(255,255,255,0.7);margin-bottom:4px">対象クレーン</div>
+        <div class="crane-vehicle-number" id="vehicleNumberDisplay2">—</div>
+        <div style="color:rgba(255,255,255,0.85)" id="craneNameDisplay">—</div>
+      </div>
+
+      <!-- フォーム -->
+      <form id="inspectionForm">
+
+        <div class="form-section">
+          <div class="form-section-title"><i class="fas fa-search"></i>点検記録</div>
+
+          <div class="form-group">
+            <label class="form-label">点検日 <span class="required">*</span></label>
+            <input type="date" class="form-control" id="iDate" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">担当者 <span class="required">*</span></label>
+            <input type="text" class="form-control" id="iOperator" placeholder="担当者名" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-oil-can" style="color:var(--color-accent)"></i> オイル残量</label>
+            <select class="form-control" id="iOilLevel">
+              <option value="">— 選択してください —</option>
+              <option value="full">満タン</option>
+              <option value="three_quarter">3/4</option>
+              <option value="half">1/2</option>
+              <option value="quarter">1/4</option>
+              <option value="low">要補充</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-circle-dot" style="color:var(--color-accent)"></i> タイヤ空気圧（kPa）</label>
+            <div class="grid grid-2" style="gap:var(--sp-sm)">
+              <div>
+                <label class="form-label" style="font-size:var(--font-size-sm)">左前 (FL)</label>
+                <input type="number" class="form-control" id="iFL" placeholder="700" min="0" max="1200">
+              </div>
+              <div>
+                <label class="form-label" style="font-size:var(--font-size-sm)">右前 (FR)</label>
+                <input type="number" class="form-control" id="iFR" placeholder="700" min="0" max="1200">
+              </div>
+              <div>
+                <label class="form-label" style="font-size:var(--font-size-sm)">左後 (RL)</label>
+                <input type="number" class="form-control" id="iRL" placeholder="700" min="0" max="1200">
+              </div>
+              <div>
+                <label class="form-label" style="font-size:var(--font-size-sm)">右後 (RR)</label>
+                <input type="number" class="form-control" id="iRR" placeholder="700" min="0" max="1200">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group mb-0">
+            <label class="form-label">備考</label>
+            <textarea class="form-control" id="iNotes" rows="3" placeholder="特記事項があれば記入"></textarea>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:var(--sp-md);margin-top:var(--sp-xl)">
+          <button type="submit" class="btn btn-accent btn-lg btn-block">
+            <i class="fas fa-save"></i> 保存する
+          </button>
+          <a id="btnBackBottom" href="crane.html" class="btn btn-outline btn-lg btn-block">
+            <i class="fas fa-times"></i> キャンセル
+          </a>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- スクリプト読み込み -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/inspection.js"></script>
+
+</body>
+</html>
