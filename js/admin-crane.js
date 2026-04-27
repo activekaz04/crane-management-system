@@ -216,7 +216,7 @@ async function loadInspectionRecords() {
     return;
   }
 
-  const LEVEL = { full:'満タン', three_quarter:'3/4', half:'1/2', quarter:'1/4', low:'要補充' };
+  const LEVEL = { appropriate:'適量', refilled:'補充済', full:'満タン', three_quarter:'3/4', half:'1/2', quarter:'1/4', low:'要補充' };
   const ITEM_LABELS = { engineOil:'エンジンオイル', coolant:'クーラント', tirePressure:'タイヤ空気圧', hydraulicOil:'作動油', other:'その他' };
 
   tbody.innerHTML = records.map(r => {
