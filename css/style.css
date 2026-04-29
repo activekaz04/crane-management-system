@@ -1072,6 +1072,35 @@ textarea.form-control { min-height: 100px; resize: vertical; }
 }
 
 /* ============================================
+   ソートボタン（クレーン管理）
+   ============================================ */
+.sort-btn {
+  border-radius: 0 !important;
+  border: none !important;
+  background: rgba(255,255,255,0.55);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: 6px 14px;
+  transition: all 0.18s;
+  cursor: pointer;
+}
+
+.sort-btn:first-child {
+  border-right: 1px solid rgba(148,163,184,0.35) !important;
+}
+
+.sort-btn.sort-btn-active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.sort-btn:hover:not(.sort-btn-active) {
+  background: rgba(255,255,255,0.90);
+  color: var(--color-primary);
+}
+
+/* ============================================
    ログインページ
    ============================================ */
 

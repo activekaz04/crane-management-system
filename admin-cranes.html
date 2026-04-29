@@ -43,9 +43,19 @@
       <h1 class="page-title" style="margin-bottom:0">
         <i class="fas fa-truck-moving"></i> クレーン管理
       </h1>
-      <button id="btnAddCrane" class="btn btn-accent">
-        <i class="fas fa-plus"></i> クレーンを追加
-      </button>
+      <div style="display:flex;align-items:center;gap:var(--sp-sm);flex-wrap:wrap">
+        <div style="display:flex;border:1px solid rgba(148,163,184,0.4);border-radius:var(--radius-md);overflow:hidden">
+          <button id="btnSortAsc" class="btn btn-sm sort-btn sort-btn-active" onclick="setSortOrder('asc')" title="車番 昇順">
+            <i class="fas fa-sort-alpha-down"></i> 昇順
+          </button>
+          <button id="btnSortDesc" class="btn btn-sm sort-btn" onclick="setSortOrder('desc')" title="車番 降順">
+            <i class="fas fa-sort-alpha-up"></i> 降順
+          </button>
+        </div>
+        <button id="btnAddCrane" class="btn btn-accent">
+          <i class="fas fa-plus"></i> クレーンを追加
+        </button>
+      </div>
     </div>
 
     <!-- クレーン一覧 -->

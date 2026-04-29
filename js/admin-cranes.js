@@ -2,6 +2,8 @@
  * クレーン管理ページ (admin-cranes.html)
  */
 
+let sortOrder = 'asc'; // 'asc' | 'desc'
+
 document.addEventListener('DOMContentLoaded', async () => {
   if (!Auth.requireAuth()) return;
   try {
@@ -14,9 +16,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+function setSortOrder(order) {
+  sortOrder = order;
+  document.getElementById('btnSortAsc').classList.toggle('sort-btn-active', order === 'asc');
+  document.getElementById('btnSortDesc').classList.toggle('sort-btn-active', order === 'desc');
+  renderCranes();
+}
+
 async function renderCranes() {
   const cranes = await DataStore.getCranes();
-  const list   = document.getElementById('craneList');
+
+  // 車番で並び替え（自然順ソート）
+  cranes.sort((a, b) => {
+    const va = (a.vehicleNumber || '').localeCompare(b.vehicleNumber || '', 'ja', { numeric: true });
+    return sortOrder === 'asc' ? va : -va;
+  });
+
+  const list = document.getElementById('craneList');
 
   if (cranes.length === 0) {
     list.innerHTML = `<div class="empty-state"><i class="fas fa-truck-moving"></i><h3>クレーンが登録されていません</h3><p>「クレーンを追加」ボタンから登録してください。</p></div>`;
