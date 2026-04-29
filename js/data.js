@@ -165,6 +165,40 @@ const DataStore = {
   },
 
   /* ============================================================
+     修理記録 CRUD
+     ============================================================ */
+
+  async getRepairRecords(craneId) {
+    const snap = await db.collection('repairs').where('craneId', '==', craneId).get();
+    const list = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    return list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  },
+
+  async getRepairRecord(id) {
+    const doc = await db.collection('repairs').doc(id).get();
+    return doc.exists ? { ...doc.data(), id: doc.id } : null;
+  },
+
+  async saveRepairRecord(record) {
+    if (!record.id) {
+      record.id        = this._generateId('R');
+      record.createdAt = new Date().toISOString();
+    }
+    record.updatedAt = new Date().toISOString();
+    await db.collection('repairs').doc(record.id).set(record);
+    return record;
+  },
+
+  async deleteRepairRecord(id) {
+    await db.collection('repairs').doc(id).delete();
+  },
+
+  async getAllRepairRecords() {
+    const snap = await db.collection('repairs').get();
+    return snap.docs.map(d => ({ ...d.data(), id: d.id }));
+  },
+
+  /* ============================================================
      ユーティリティ
      ============================================================ */
 

@@ -64,7 +64,18 @@
             </select>
           </div>
 
-          <div class="form-group">
+          <div class="grid grid-2" style="gap:var(--sp-md)">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">オドメーター</label>
+              <input type="number" class="form-control" id="iOdometer" placeholder="例：12500" min="0">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">アワメーター</label>
+              <input type="number" class="form-control" id="iHourMeter" placeholder="例：3200" min="0">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:var(--sp-md)">
             <label class="form-label">
               点検項目
               <span style="font-weight:400;font-size:var(--font-size-sm);color:var(--color-text-muted);margin-left:6px">タップして選択・入力</span>

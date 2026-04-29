@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function renderStats() {
   const cranes  = await DataStore.getCranes();
   const records = await DataStore.getAllMaintenanceRecords();
+  const repairs = await DataStore.getAllRepairRecords();
 
   let alertCount = 0, expiredCount = 0;
   for (const c of cranes) {
@@ -35,6 +36,7 @@ async function renderStats() {
   document.getElementById('statRecords').textContent = records.length;
   document.getElementById('statAlert').textContent   = alertCount;
   document.getElementById('statExpired').textContent = expiredCount;
+  document.getElementById('statRepairs').textContent = repairs.length;
 }
 
 async function renderCraneList() {
@@ -69,7 +71,7 @@ async function renderCraneList() {
     return `<tr>
       <td><strong>${crane.id}</strong></td>
       <td>${crane.vehicleNumber}</td>
-      <td>${crane.name}</td>
+      <td>${crane.model || '—'}</td>
       <td>${crane.location || '—'}</td>
       <td>${lastDate ? formatDate(lastDate) : '—'}</td>
       <td>${statusBadge}</td>

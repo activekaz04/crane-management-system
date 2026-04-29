@@ -15,9 +15,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadCrane();
     await loadMaintenanceRecords();
     await loadInspectionRecords();
+    await loadRepairRecords();
     document.getElementById('craneEditForm').addEventListener('submit', saveCraneInfo);
     document.getElementById('btnAddMaint').addEventListener('click', () => openMaintModal(null));
     document.getElementById('btnAddInspection').addEventListener('click', () => openInspectionModal(null));
+    document.getElementById('btnAddRepair').addEventListener('click', () => openRepairModal(null));
   } catch (e) {
     console.error(e);
     showToast('データの読み込みに失敗しました', 'error');
@@ -133,7 +135,17 @@ async function openMaintModal(recordId) {
             <label class="form-label">使用数量</label>
             <input type="text" class="form-control" id="mQuantity" value="${rec ? (rec.quantity || '') : ''}" placeholder="例：15L">
           </div>
-          <div class="form-group">
+          <div class="grid grid-2" style="gap:var(--sp-md)">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">オドメーター</label>
+              <input type="number" class="form-control" id="mOdometer" value="${rec ? (rec.odometer || '') : ''}" placeholder="例：12500" min="0">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">アワメーター</label>
+              <input type="number" class="form-control" id="mHourMeter" value="${rec ? (rec.hourMeter || '') : ''}" placeholder="例：3200" min="0">
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:var(--sp-md)">
             <label class="form-label">備考</label>
             <textarea class="form-control" id="mNotes" rows="3">${rec ? (rec.notes || '') : ''}</textarea>
           </div>
@@ -174,6 +186,10 @@ async function saveMaintRecord(recordId) {
   };
 
   if (['engine_oil', 'coolant', 'hydraulic_oil'].includes(typeKey)) record.quantity = document.getElementById('mQuantity').value.trim();
+  const odometer  = document.getElementById('mOdometer').value;
+  const hourMeter = document.getElementById('mHourMeter').value;
+  if (odometer)  record.odometer  = Number(odometer);
+  if (hourMeter) record.hourMeter = Number(hourMeter);
 
   await DataStore.saveMaintenanceRecord(record);
   document.getElementById('maintModal').remove();
@@ -294,7 +310,17 @@ async function openInspectionModal(recordId) {
                 <input type="number" class="form-control" id="iRR" value="${tp.rr || ''}" placeholder="700"></div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="grid grid-2" style="gap:var(--sp-md)">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">オドメーター</label>
+              <input type="number" class="form-control" id="iOdometer" value="${rec ? (rec.odometer || '') : ''}" placeholder="例：12500" min="0">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">アワメーター</label>
+              <input type="number" class="form-control" id="iHourMeter" value="${rec ? (rec.hourMeter || '') : ''}" placeholder="例：3200" min="0">
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:var(--sp-md)">
             <label class="form-label">備考</label>
             <textarea class="form-control" id="iNotes" rows="2">${rec ? (rec.notes || '') : ''}</textarea>
           </div>
@@ -333,6 +359,11 @@ async function saveInspection(recordId) {
     notes: document.getElementById('iNotes').value.trim(),
   };
 
+  const iOdometer  = document.getElementById('iOdometer').value;
+  const iHourMeter = document.getElementById('iHourMeter').value;
+  if (iOdometer)  record.odometer  = Number(iOdometer);
+  if (iHourMeter) record.hourMeter = Number(iHourMeter);
+
   await DataStore.saveInspectionRecord(record);
   document.getElementById('inspectionModal').remove();
   showToast('点検記録を保存しました', 'success');
@@ -344,5 +375,115 @@ function deleteInspection(recordId) {
     await DataStore.deleteInspectionRecord(recordId);
     showToast('点検記録を削除しました', 'success');
     await loadInspectionRecords();
+  });
+}
+
+/* ============================================================
+   修理記録
+   ============================================================ */
+
+async function loadRepairRecords() {
+  const records = await DataStore.getRepairRecords(currentCraneId);
+  const tbody   = document.getElementById('repairTableBody');
+
+  if (records.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted" style="padding:24px">記録がありません</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = records.map(r => `<tr>
+    <td>${formatDate(r.date)}</td>
+    <td><strong>${r.faultLocation || '—'}</strong></td>
+    <td>${r.replacedParts || '—'}</td>
+    <td style="max-width:200px;white-space:pre-wrap;font-size:var(--font-size-xs)">${r.countermeasure || '—'}</td>
+    <td>${r.operator || '—'}</td>
+    <td>${r.notes || '—'}</td>
+    <td>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-sm btn-outline" onclick="openRepairModal('${r.id}')"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-sm btn-danger"  onclick="deleteRepair('${r.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+async function openRepairModal(recordId) {
+  const rec    = recordId ? await DataStore.getRepairRecord(recordId) : null;
+  const isEdit = !!rec;
+  const today  = new Date().toISOString().split('T')[0];
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'repairModal';
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fas fa-tools"></i>${isEdit ? '修理記録を編集' : '修理記録を追加'}</div>
+        <button class="modal-close" onclick="document.getElementById('repairModal').remove()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="repairForm">
+          <div class="form-group">
+            <label class="form-label">修理日 <span class="required">*</span></label>
+            <input type="date" class="form-control" id="rDate" value="${rec ? rec.date : today}" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">担当者</label>
+            <input type="text" class="form-control" id="rOperator" value="${rec ? (rec.operator || '') : ''}" placeholder="担当者名">
+          </div>
+          <div class="form-group">
+            <label class="form-label">故障箇所 <span class="required">*</span></label>
+            <input type="text" class="form-control" id="rFaultLocation" value="${rec ? (rec.faultLocation || '') : ''}" placeholder="例：エンジン冷却系" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">交換部品</label>
+            <input type="text" class="form-control" id="rReplacedParts" value="${rec ? (rec.replacedParts || '') : ''}" placeholder="例：ウォーターポンプ、Oリング">
+          </div>
+          <div class="form-group">
+            <label class="form-label">対策</label>
+            <textarea class="form-control" id="rCountermeasure" rows="3" placeholder="実施した対策内容を記入">${rec ? (rec.countermeasure || '') : ''}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">備考</label>
+            <textarea class="form-control" id="rNotes" rows="2" placeholder="特記事項">${rec ? (rec.notes || '') : ''}</textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="document.getElementById('repairModal').remove()">キャンセル</button>
+        <button class="btn btn-accent" onclick="saveRepair('${recordId || ''}')"><i class="fas fa-save"></i> 保存</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(overlay);
+}
+
+async function saveRepair(recordId) {
+  const date         = document.getElementById('rDate').value;
+  const faultLocation = document.getElementById('rFaultLocation').value.trim();
+  if (!date || !faultLocation) { showToast('修理日と故障箇所は必須です', 'error'); return; }
+
+  const record = {
+    id:              recordId || undefined,
+    craneId:         currentCraneId,
+    date,
+    operator:        document.getElementById('rOperator').value.trim(),
+    faultLocation,
+    replacedParts:   document.getElementById('rReplacedParts').value.trim(),
+    countermeasure:  document.getElementById('rCountermeasure').value.trim(),
+    notes:           document.getElementById('rNotes').value.trim(),
+  };
+
+  await DataStore.saveRepairRecord(record);
+  document.getElementById('repairModal').remove();
+  showToast('修理記録を保存しました', 'success');
+  await loadRepairRecords();
+}
+
+function deleteRepair(recordId) {
+  showConfirm('この修理記録を削除しますか？', async () => {
+    await DataStore.deleteRepairRecord(recordId);
+    showToast('修理記録を削除しました', 'success');
+    await loadRepairRecords();
   });
 }

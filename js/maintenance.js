@@ -93,8 +93,20 @@ function buildFormHtml(t) {
     </div>`;
   }
 
-  return common + extra + `
-      <div class="form-group mb-0">
+  const meters = `
+      <div class="grid grid-2" style="gap:var(--sp-md)">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">オドメーター</label>
+          <input type="number" class="form-control" name="${t.key}_odometer" placeholder="例：12500" min="0">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">アワメーター</label>
+          <input type="number" class="form-control" name="${t.key}_hourMeter" placeholder="例：3200" min="0">
+        </div>
+      </div>`;
+
+  return common + extra + meters + `
+      <div class="form-group mb-0" style="margin-top:var(--sp-md)">
         <label class="form-label">備考</label>
         <textarea class="form-control" name="${t.key}_notes" rows="3" placeholder="特記事項があれば記入"></textarea>
       </div>
@@ -120,6 +132,10 @@ async function handleSubmit(e) {
   };
 
   if (['engine_oil', 'coolant', 'hydraulic_oil'].includes(typeKey)) record.quantity = g('quantity');
+  const odometer  = g('odometer');
+  const hourMeter = g('hourMeter');
+  if (odometer)  record.odometer  = Number(odometer);
+  if (hourMeter) record.hourMeter = Number(hourMeter);
 
   try {
     const btn = document.querySelector('#maintenanceForm button[type="submit"]');

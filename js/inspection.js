@@ -76,6 +76,11 @@ async function handleSubmit(e, craneId) {
     notes: val('iNotes'),
   };
 
+  const odometer  = val('iOdometer');
+  const hourMeter = val('iHourMeter');
+  if (odometer)  record.odometer  = Number(odometer);
+  if (hourMeter) record.hourMeter = Number(hourMeter);
+
   try {
     const btn = document.querySelector('#inspectionForm button[type="submit"]');
     btn.disabled = true;
