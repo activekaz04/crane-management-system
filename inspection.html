@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>点検入力 | サンワクレーン</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,17 +47,17 @@
 
           <div class="form-group">
             <label class="form-label">点検日 <span class="required">*</span></label>
-            <input type="date" class="form-control" id="iDate" required>
+            <input type="date" class="form-control" id="iDate">
           </div>
 
           <div class="form-group">
             <label class="form-label">担当者 <span class="required">*</span></label>
-            <input type="text" class="form-control" id="iOperator" placeholder="担当者名" required>
+            <input type="text" class="form-control" id="iOperator" placeholder="担当者名">
           </div>
 
           <div class="form-group">
             <label class="form-label">部位 <span class="required">*</span></label>
-            <select class="form-control" id="iSection" required>
+            <select class="form-control" id="iSection">
               <option value="">— 選択してください —</option>
               <option value="carrier">キャリア</option>
               <option value="upper">アッパー</option>
@@ -206,7 +206,7 @@
           </div>
         </div>
 
-        <div style="display:flex;flex-direction:column;gap:var(--sp-md);margin-top:var(--sp-xl)">
+        <div style="display:flex;flex-direction:column;gap:var(--sp-md);margin-top:var(--sp-xl);padding-bottom:calc(var(--sp-xl) + env(safe-area-inset-bottom))">
           <button type="submit" class="btn btn-accent btn-lg btn-block">
             <i class="fas fa-save"></i> 保存する
           </button>

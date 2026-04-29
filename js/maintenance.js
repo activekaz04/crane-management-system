@@ -65,7 +65,7 @@ function buildFormHtml(t) {
       <div class="form-section-title"><i class="fas ${t.icon}"></i>${t.label}</div>
       <div class="form-group">
         <label class="form-label">部位 <span class="required">*</span></label>
-        <select class="form-control" name="${t.key}_section" required>
+        <select class="form-control" name="${t.key}_section">
           <option value="">— 選択してください —</option>
           <option value="carrier">キャリア</option>
           <option value="upper">アッパー</option>
@@ -73,7 +73,7 @@ function buildFormHtml(t) {
       </div>
       <div class="form-group">
         <label class="form-label">実施日 <span class="required">*</span></label>
-        <input type="date" class="form-control date-today-default" name="${t.key}_date" required>
+        <input type="date" class="form-control date-today-default" name="${t.key}_date">
       </div>
       <div class="form-group">
         <label class="form-label">次回予定日</label>
@@ -81,7 +81,7 @@ function buildFormHtml(t) {
       </div>
       <div class="form-group">
         <label class="form-label">担当者 <span class="required">*</span></label>
-        <input type="text" class="form-control" name="${t.key}_operator" placeholder="担当者名" required>
+        <input type="text" class="form-control" name="${t.key}_operator" placeholder="担当者名">
       </div>`;
 
   const QUANTITY_TYPES = ['engine_oil', 'coolant', 'hydraulic_oil'];
@@ -121,13 +121,21 @@ async function handleSubmit(e) {
   const form    = e.target;
   const g = name => form.elements[`${typeKey}_${name}`]?.value?.trim() || '';
 
+  const section  = g('section');
+  const date     = g('date');
+  const operator = g('operator');
+
+  if (!section)  { showToast('部位を選択してください', 'error'); return; }
+  if (!date)     { showToast('実施日を入力してください', 'error'); return; }
+  if (!operator) { showToast('担当者を入力してください', 'error'); return; }
+
   const record = {
     craneId:  currentCraneId,
     type:     typeKey,
-    section:  g('section'),
-    date:     g('date'),
+    section,
+    date,
     nextDate: g('nextDate') || null,
-    operator: g('operator'),
+    operator,
     notes:    g('notes'),
   };
 
