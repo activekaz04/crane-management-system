@@ -32,26 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       </div>`;
 
-    const latest = await DataStore.getLatestMaintenanceByType(craneId);
-    const types  = DataStore.getMaintTypes();
-
-    document.getElementById('maintCards').innerHTML = types.map(t => {
-      const rec  = latest[t.key];
-      const days = rec ? getDaysUntil(rec.nextDate) : null;
-      const st   = getDateStatus(days);
-      return `
-        <div class="maint-card">
-          <div class="maint-card-title"><i class="fas ${t.icon}"></i>${t.label}</div>
-          ${rec ? `
-            <div class="maint-date-row"><i class="fas fa-calendar-check"></i> 最終実施：<strong>${formatDate(rec.date)}</strong></div>
-            <div class="maint-date-row"><i class="fas fa-calendar-alt"></i> 次回予定：<strong>${formatDate(rec.nextDate)}</strong>
-              <span class="badge ${st.badgeCls}">${st.label}</span>
-            </div>
-            <div class="maint-date-row"><i class="fas fa-user"></i> 担当：<strong>${rec.operator || '—'}</strong></div>
-          ` : `<div class="maint-date-row text-muted"><i class="fas fa-minus-circle"></i> 記録なし</div>`}
-        </div>`;
-    }).join('');
-
     document.getElementById('btnMaintenance').href = `maintenance.html?id=${craneId}`;
     document.getElementById('btnInspection').href  = `inspection.html?id=${craneId}`;
     document.getElementById('btnRepair').href      = `repair.html?id=${craneId}`;
