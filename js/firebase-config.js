@@ -14,4 +14,5 @@ const firebaseConfig = {
 
 /* Firebase初期化 */
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db      = firebase.firestore();
+const storage = firebase.storage();

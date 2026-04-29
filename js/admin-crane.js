@@ -387,24 +387,33 @@ async function loadRepairRecords() {
   const tbody   = document.getElementById('repairTableBody');
 
   if (records.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted" style="padding:24px">記録がありません</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted" style="padding:24px">記録がありません</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = records.map(r => `<tr>
-    <td>${formatDate(r.date)}</td>
-    <td><strong>${r.faultLocation || '—'}</strong></td>
-    <td>${r.replacedParts || '—'}</td>
-    <td style="max-width:200px;white-space:pre-wrap;font-size:var(--font-size-xs)">${r.countermeasure || '—'}</td>
-    <td>${r.operator || '—'}</td>
-    <td>${r.notes || '—'}</td>
-    <td>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-sm btn-outline" onclick="openRepairModal('${r.id}')"><i class="fas fa-edit"></i></button>
-        <button class="btn btn-sm btn-danger"  onclick="deleteRepair('${r.id}')"><i class="fas fa-trash"></i></button>
-      </div>
-    </td>
-  </tr>`).join('');
+  tbody.innerHTML = records.map(r => {
+    const photoHtml = r.photoURLs && r.photoURLs.length > 0
+      ? r.photoURLs.map(url => `
+          <a href="${url}" target="_blank" style="display:inline-block;margin:2px">
+            <img src="${url}" alt="写真" style="width:52px;height:52px;object-fit:cover;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.15)">
+          </a>`).join('')
+      : '—';
+    return `<tr>
+      <td>${formatDate(r.date)}</td>
+      <td><strong>${r.faultLocation || '—'}</strong></td>
+      <td>${r.replacedParts || '—'}</td>
+      <td style="max-width:200px;white-space:pre-wrap;font-size:var(--font-size-xs)">${r.countermeasure || '—'}</td>
+      <td>${r.operator || '—'}</td>
+      <td>${r.notes || '—'}</td>
+      <td style="min-width:60px">${photoHtml}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-outline" onclick="openRepairModal('${r.id}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-sm btn-danger"  onclick="deleteRepair('${r.id}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
 async function openRepairModal(recordId) {
