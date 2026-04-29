@@ -2,8 +2,8 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>メンテナンス履歴 | サンワクレーン</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>記録履歴 | サンワクレーン</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
            alt="サンワクレーン"
            onerror="this.style.display='none'">
       <div class="header-brand-text">
-        <div class="header-title">メンテナンス履歴</div>
+        <div class="header-title">記録履歴</div>
         <div class="header-subtitle" id="vehicleNumberDisplay">—</div>
       </div>
     </a>
@@ -46,7 +46,7 @@
       <div class="filter-bar" id="filterBar"></div>
 
       <!-- 履歴リスト -->
-      <div id="historyList" class="history-list"></div>
+      <div id="historyList" class="history-list" style="padding-bottom:calc(var(--sp-xl) + env(safe-area-inset-bottom))"></div>
     </div>
 
   </main>
