@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('btnMaintenance').href = `maintenance.html?id=${craneId}`;
     document.getElementById('btnInspection').href  = `inspection.html?id=${craneId}`;
+    document.getElementById('btnRepair').href      = `repair.html?id=${craneId}`;
     document.getElementById('btnHistory').href     = `history.html?id=${craneId}`;
     document.getElementById('craneContent').classList.remove('hidden');
     document.getElementById('loadingEl').classList.add('hidden');

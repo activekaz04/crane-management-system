@@ -51,12 +51,15 @@
       <div id="maintCards" class="grid"></div>
 
       <!-- 操作ボタン -->
-      <div style="display:flex;flex-direction:column;gap:var(--sp-md);margin-top:var(--sp-xl)">
+      <div style="display:flex;flex-direction:column;gap:var(--sp-md);margin-top:var(--sp-xl);padding-bottom:calc(var(--sp-xl) + env(safe-area-inset-bottom))">
         <a id="btnMaintenance" href="#" class="btn btn-accent btn-lg btn-block">
           <i class="fas fa-wrench"></i> メンテナンスを記録する
         </a>
         <a id="btnInspection" href="#" class="btn btn-primary btn-lg btn-block">
           <i class="fas fa-search"></i> 点検を記録する
+        </a>
+        <a id="btnRepair" href="#" class="btn btn-outline btn-lg btn-block" style="border-color:rgba(220,38,38,0.40);color:var(--color-danger)">
+          <i class="fas fa-tools"></i> 修理を記録する
         </a>
         <a id="btnHistory" href="#" class="btn btn-outline btn-lg btn-block">
           <i class="fas fa-history"></i> 履歴を見る
