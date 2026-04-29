@@ -382,6 +382,120 @@ function deleteInspection(recordId) {
    修理記録
    ============================================================ */
 
+/* ---- 写真アップロード用の状態 ---- */
+let adminSelectedFiles      = [];  // 新規追加ファイル
+let adminExistingPhotoURLs  = [];  // 既存の写真URL（編集時）
+
+function adminInitPhotoState(existingURLs) {
+  adminSelectedFiles     = [];
+  adminExistingPhotoURLs = existingURLs ? [...existingURLs] : [];
+}
+
+function adminTotalPhotoCount() {
+  return adminExistingPhotoURLs.length + adminSelectedFiles.length;
+}
+
+function adminUpdateAddBtn() {
+  const btn = document.getElementById('adminBtnAddPhoto');
+  if (btn) btn.style.display = adminTotalPhotoCount() >= 3 ? 'none' : '';
+}
+
+function adminHandlePhotoSelect(e) {
+  const files  = Array.from(e.target.files);
+  const canAdd = 3 - adminTotalPhotoCount();
+  if (canAdd <= 0) { showToast('写真は最大3枚までです', 'error'); return; }
+
+  files.slice(0, canAdd).forEach(file => {
+    adminSelectedFiles.push(file);
+    adminRenderNewPreview(file, adminSelectedFiles.length - 1);
+  });
+  adminUpdateAddBtn();
+  e.target.value = '';
+}
+
+function adminRenderNewPreview(file, index) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const grid = document.getElementById('adminPhotoPreviewGrid');
+    if (!grid) return;
+    const div = document.createElement('div');
+    div.className = 'photo-thumbnail';
+    div.dataset.newIdx = index;
+    div.innerHTML = `
+      <img src="${ev.target.result}" alt="写真">
+      <button type="button" class="photo-remove-btn" onclick="adminRemoveNewPhoto(${index})">
+        <i class="fas fa-times"></i>
+      </button>`;
+    grid.appendChild(div);
+  };
+  reader.readAsDataURL(file);
+}
+
+function adminRemoveExistingPhoto(index) {
+  adminExistingPhotoURLs.splice(index, 1);
+  adminRedrawExistingPhotos();
+  adminUpdateAddBtn();
+}
+
+function adminRemoveNewPhoto(index) {
+  adminSelectedFiles.splice(index, 1);
+  // 新規プレビューを全再描画
+  document.querySelectorAll('#adminPhotoPreviewGrid [data-new-idx]').forEach(el => el.remove());
+  adminSelectedFiles.forEach((f, i) => adminRenderNewPreview(f, i));
+  adminUpdateAddBtn();
+}
+
+function adminRedrawExistingPhotos() {
+  document.querySelectorAll('#adminPhotoPreviewGrid [data-existing-idx]').forEach(el => el.remove());
+  adminExistingPhotoURLs.forEach((url, i) => {
+    const grid = document.getElementById('adminPhotoPreviewGrid');
+    if (!grid) return;
+    const div = document.createElement('div');
+    div.className = 'photo-thumbnail';
+    div.dataset.existingIdx = i;
+    div.innerHTML = `
+      <img src="${url}" alt="既存写真${i + 1}">
+      <button type="button" class="photo-remove-btn" onclick="adminRemoveExistingPhoto(${i})">
+        <i class="fas fa-times"></i>
+      </button>`;
+    grid.insertBefore(div, grid.firstChild);
+  });
+}
+
+function adminCompressImage(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1200;
+        let { width, height } = img;
+        if (width > MAX) { height = Math.round(height * MAX / width); width = MAX; }
+        const canvas = document.createElement('canvas');
+        canvas.width  = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        canvas.toBlob(blob => resolve(blob || file), 'image/jpeg', 0.78);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function adminUploadNewPhotos(craneId, recordId) {
+  const urls = [];
+  for (let i = 0; i < adminSelectedFiles.length; i++) {
+    const compressed = await adminCompressImage(adminSelectedFiles[i]);
+    const timestamp  = Date.now();
+    const ref = storage.ref(`repairs/${craneId}/${recordId}/photo_${timestamp}_${i}.jpg`);
+    await ref.put(compressed, { contentType: 'image/jpeg' });
+    const url = await ref.getDownloadURL();
+    urls.push(url);
+  }
+  return urls;
+}
+
 async function loadRepairRecords() {
   const records = await DataStore.getRepairRecords(currentCraneId);
   const tbody   = document.getElementById('repairTableBody');
@@ -421,6 +535,18 @@ async function openRepairModal(recordId) {
   const isEdit = !!rec;
   const today  = new Date().toISOString().split('T')[0];
 
+  // 写真状態を初期化
+  adminInitPhotoState(rec?.photoURLs);
+
+  // 既存写真のHTMLを生成
+  const existingPhotosHtml = adminExistingPhotoURLs.map((url, i) => `
+    <div class="photo-thumbnail" data-existing-idx="${i}">
+      <img src="${url}" alt="写真${i + 1}">
+      <button type="button" class="photo-remove-btn" onclick="adminRemoveExistingPhoto(${i})">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>`).join('');
+
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
   overlay.id = 'repairModal';
@@ -456,37 +582,86 @@ async function openRepairModal(recordId) {
             <label class="form-label">備考</label>
             <textarea class="form-control" id="rNotes" rows="2" placeholder="特記事項">${rec ? (rec.notes || '') : ''}</textarea>
           </div>
+          <div class="form-group mb-0">
+            <label class="form-label">写真
+              <span style="font-weight:400;color:var(--color-text-muted);font-size:var(--font-size-sm)">（任意・最大3枚）</span>
+            </label>
+            <input type="file" id="adminPhotoInput" accept="image/*" multiple style="display:none">
+            <div id="adminPhotoArea" class="photo-upload-area">
+              <div id="adminPhotoPreviewGrid" class="photo-preview-grid">
+                ${existingPhotosHtml}
+              </div>
+              <button type="button" id="adminBtnAddPhoto" class="photo-add-btn"
+                      style="${adminTotalPhotoCount() >= 3 ? 'display:none' : ''}">
+                <i class="fas fa-camera" style="font-size:20px;margin-bottom:4px"></i>
+                <span>写真を追加</span>
+              </button>
+            </div>
+            <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);margin-top:6px">
+              <i class="fas fa-info-circle"></i> 写真は自動で圧縮されます
+            </div>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="document.getElementById('repairModal').remove()">キャンセル</button>
-        <button class="btn btn-accent" onclick="saveRepair('${recordId || ''}')"><i class="fas fa-save"></i> 保存</button>
+        <button class="btn btn-accent" id="btnSaveRepair" onclick="saveRepair('${recordId || ''}')"><i class="fas fa-save"></i> 保存</button>
       </div>
     </div>`;
 
   document.body.appendChild(overlay);
+
+  // ファイル選択イベントを登録
+  document.getElementById('adminBtnAddPhoto').addEventListener('click', () => {
+    document.getElementById('adminPhotoInput').click();
+  });
+  document.getElementById('adminPhotoInput').addEventListener('change', adminHandlePhotoSelect);
 }
 
 async function saveRepair(recordId) {
-  const date         = document.getElementById('rDate').value;
+  const date          = document.getElementById('rDate').value;
   const faultLocation = document.getElementById('rFaultLocation').value.trim();
   if (!date || !faultLocation) { showToast('修理日と故障箇所は必須です', 'error'); return; }
 
-  const record = {
-    id:              recordId || undefined,
-    craneId:         currentCraneId,
-    date,
-    operator:        document.getElementById('rOperator').value.trim(),
-    faultLocation,
-    replacedParts:   document.getElementById('rReplacedParts').value.trim(),
-    countermeasure:  document.getElementById('rCountermeasure').value.trim(),
-    notes:           document.getElementById('rNotes').value.trim(),
-  };
+  const saveBtn = document.getElementById('btnSaveRepair');
+  if (saveBtn) { saveBtn.disabled = true; saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 保存中...'; }
 
-  await DataStore.saveRepairRecord(record);
-  document.getElementById('repairModal').remove();
-  showToast('修理記録を保存しました', 'success');
-  await loadRepairRecords();
+  try {
+    // レコードIDを確定（新規は生成、編集は既存ID）
+    const finalId = recordId || ('R' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase());
+
+    // 新規写真をアップロード
+    let newPhotoURLs = [];
+    if (adminSelectedFiles.length > 0) {
+      if (saveBtn) saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 写真アップロード中...';
+      newPhotoURLs = await adminUploadNewPhotos(currentCraneId, finalId);
+    }
+
+    // 既存URL + 新規URLを結合
+    const allPhotoURLs = [...adminExistingPhotoURLs, ...newPhotoURLs];
+
+    const record = {
+      id:             finalId,
+      craneId:        currentCraneId,
+      date,
+      operator:       document.getElementById('rOperator').value.trim(),
+      faultLocation,
+      replacedParts:  document.getElementById('rReplacedParts').value.trim(),
+      countermeasure: document.getElementById('rCountermeasure').value.trim(),
+      notes:          document.getElementById('rNotes').value.trim(),
+    };
+    if (allPhotoURLs.length > 0) record.photoURLs = allPhotoURLs;
+
+    await DataStore.saveRepairRecord(record);
+    document.getElementById('repairModal').remove();
+    showToast('修理記録を保存しました', 'success');
+    await loadRepairRecords();
+
+  } catch (e) {
+    console.error(e);
+    showToast('保存に失敗しました', 'error');
+    if (saveBtn) { saveBtn.disabled = false; saveBtn.innerHTML = '<i class="fas fa-save"></i> 保存'; }
+  }
 }
 
 function deleteRepair(recordId) {
