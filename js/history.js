@@ -180,16 +180,6 @@ function buildItemHtml(r) {
           ${r.replacedParts ? `<div class="history-detail-item" style="flex-basis:100%"><span class="history-detail-label">交換部品</span><span>${r.replacedParts}</span></div>` : ''}
           ${r.countermeasure ? `<div class="history-detail-item" style="flex-basis:100%"><span class="history-detail-label">対策</span><span>${r.countermeasure}</span></div>` : ''}
           ${r.notes ? `<div class="history-detail-item" style="flex-basis:100%"><span class="history-detail-label">備考</span><span>${r.notes}</span></div>` : ''}
-          ${r.photoURLs && r.photoURLs.length > 0 ? `
-            <div class="history-detail-item" style="flex-basis:100%">
-              <span class="history-detail-label">写真</span>
-              <div class="photo-history-grid">
-                ${r.photoURLs.map((url, i) => `
-                  <a href="${url}" target="_blank" class="photo-history-item" title="写真${i + 1}を拡大">
-                    <img src="${url}" alt="修理写真${i + 1}" loading="lazy">
-                  </a>`).join('')}
-              </div>
-            </div>` : ''}
         </div>
       </div>`;
   }

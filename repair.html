@@ -73,26 +73,9 @@
             <textarea class="form-control" id="rCountermeasure" rows="4" placeholder="実施した対策内容を記入"></textarea>
           </div>
 
-          <div class="form-group">
+          <div class="form-group mb-0">
             <label class="form-label">備考</label>
             <textarea class="form-control" id="rNotes" rows="3" placeholder="特記事項があれば記入"></textarea>
-          </div>
-
-          <div class="form-group mb-0">
-            <label class="form-label">写真
-              <span style="font-weight:400;color:var(--color-text-muted);font-size:var(--font-size-sm)">（任意・最大3枚）</span>
-            </label>
-            <input type="file" id="photoInput" accept="image/*" multiple style="display:none">
-            <div id="photoArea" class="photo-upload-area">
-              <div id="photoPreviewGrid" class="photo-preview-grid"></div>
-              <button type="button" id="btnAddPhoto" class="photo-add-btn">
-                <i class="fas fa-camera" style="font-size:22px;margin-bottom:4px"></i>
-                <span>写真を追加</span>
-              </button>
-            </div>
-            <div style="font-size:var(--font-size-xs);color:var(--color-text-muted);margin-top:6px">
-              <i class="fas fa-info-circle"></i> 写真は自動で圧縮してからアップロードします
-            </div>
           </div>
         </div>
 
@@ -113,7 +96,6 @@
   <!-- スクリプト読み込み -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
