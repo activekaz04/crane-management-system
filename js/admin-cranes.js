@@ -170,7 +170,7 @@ function showQrModal(craneId) {
       </div>`;
     document.body.appendChild(overlay);
 
-    const url = `https://activekaz04.github.io/crane-management-system/crane.html?id=${craneId}`;
+    const url = `https://sanwa-crane.github.io/crane-management-system/crane.html?id=${craneId}`;
     document.getElementById('qrUrlText').textContent = url;
     new QRCode(document.getElementById('qrCodeWrap'), { text: url, width: 200, height: 200, colorDark: '#1a2744', colorLight: '#ffffff' });
   });

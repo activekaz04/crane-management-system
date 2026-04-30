@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!Auth.requireAuth()) return;
 
   /* ベースURLは常にGitHub Pages */
-  document.getElementById('baseUrlInput').value = 'https://activekaz04.github.io/crane-management-system/';
+  document.getElementById('baseUrlInput').value = 'https://sanwa-crane.github.io/crane-management-system/';
 
   try {
     await DataStore.init();
